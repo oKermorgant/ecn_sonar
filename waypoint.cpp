@@ -12,7 +12,7 @@ using namespace std;
 class Listener
     {
     public : nav_msgs::Odometry last_msg;
-    	bool test = false;
+    	bool test;
     	void Callback(const nav_msgs::Odometry& msg) {last_msg = msg; test = true;};
         };
 
@@ -35,7 +35,7 @@ int main(int argc, char **argv) {
     cmd[0].pose.position.x = -5;
     cmd[0].pose.position.y = 5;
     cmd[0].pose.position.z = -5;
-    cmd[0].pose.orientation.x = 1;
+    cmd[0].pose.orientation.x = 0;
     cmd[0].pose.orientation.y = 0;
     cmd[0].pose.orientation.z = 0;
     cmd[0].pose.orientation.w = 1;
@@ -44,24 +44,24 @@ int main(int argc, char **argv) {
     cmd[1].pose.position.y = 5;
     cmd[1].pose.position.z = -1;
     cmd[1].pose.orientation.x = 0;
-    cmd[1].pose.orientation.y = -1;
-    cmd[1].pose.orientation.z = 0;
+    cmd[1].pose.orientation.y = 0;
+    cmd[1].pose.orientation.z = -1;
     cmd[1].pose.orientation.w = 1;
 
     cmd[2].pose.position.x = 5;
     cmd[2].pose.position.y = -5;
     cmd[2].pose.position.z = -7;
-    cmd[2].pose.orientation.x = -1;
+    cmd[2].pose.orientation.x = 0;
     cmd[2].pose.orientation.y = 0;
-    cmd[2].pose.orientation.z = 0;
+    cmd[2].pose.orientation.z = -1;
     cmd[2].pose.orientation.w = 1;
 
     cmd[3].pose.position.x = -5;
     cmd[3].pose.position.y = -5;
 	cmd[3].pose.position.z = -1;
     cmd[3].pose.orientation.x = 0;
-    cmd[3].pose.orientation.y = 1;
-    cmd[3].pose.orientation.z = 0;
+    cmd[3].pose.orientation.y = 0;
+    cmd[3].pose.orientation.z = 1;
     cmd[3].pose.orientation.w = 1;
 
 

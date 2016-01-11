@@ -4,22 +4,23 @@
 <!--  |    EDITING THIS FILE BY HAND IS NOT RECOMMENDED                                        |  -->
 <!--  ==========================================================================================  -->
 <sdf version="1.4">
-  <model name="terrain">
+  <model name="container">
     <static>true</static>
     <link name="link">
       <visual name="visual">
         <geometry>
           <mesh>
-            <uri>file://$(find freefloating_gazebo_demo)/terrain/shipwreck/terrain.dae</uri>
+            <uri>file://$(find ecn_sonar)/urdf/container.dae</uri>
           </mesh>
         </geometry>
       </visual>
       <collision name="collision">
         <geometry>
-          <mesh>
-            <uri>file://$(find freefloating_gazebo_demo)/terrain/shipwreck/terrain.dae</uri>
-          </mesh>
-        </geometry>
+           <box>
+            <size>.95 .95 2.35</size>
+          </box>
+        </geometry>    
+        <pose>0.055 0.465 0 0 0 0</pose>
         <surface>
           <friction>
             <ode>
@@ -31,4 +32,4 @@
       </collision>
     </link>
   </model>
-</sdf>
+  </sdf>
