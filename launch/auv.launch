@@ -19,7 +19,7 @@
         <rosparam file="$(find ecn_sonar)/config/ecn_auv_control.yaml" command="load"/>
   
         <!-- Launch low-level PID control for body and arm -->
-        <node name="pid_control" pkg="freefloating_gazebo" type="pid_control" output="screen"/>
+        <node name="pid_control" pkg="freefloating_gazebo" type="pid_control" output="screen" respawn="true"/>
     </group>
     
     
