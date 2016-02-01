@@ -29,6 +29,7 @@
             </ode>
           </friction>
         </surface>
+	<laser_retro>8010</laser_retro>
       </collision>
     </link>
   </model>

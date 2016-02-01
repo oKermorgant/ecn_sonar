@@ -12,17 +12,25 @@ find_package(catkin REQUIRED COMPONENTS
 
 catkin_package()
 
+#External package includes
+find_package(OpenCV REQUIRED)
+include_directories(${OpenCV_INCLUDE_DIRS})
+
 
 include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
 ## Declare a C++ executable
-add_executable(waypoint waypoint.cpp)
+add_executable(waypoint waypoint_sonar.cpp)
+add_executable(display display_node.cpp)
+add_executable(mapping mapping_node.cpp)
 
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(waypoint ${catkin_LIBRARIES} )
+target_link_libraries(display ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
+target_link_libraries(mapping ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
 
 # specify dependency on custom messages
 add_dependencies(waypoint freefloating_gazebo_generate_messages_cpp)
