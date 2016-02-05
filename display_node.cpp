@@ -38,6 +38,13 @@ void MyLine( Mat img, Point start, Point end, Scalar color)
     lineType );
 }
 
+string float2string(float f)
+{
+  ostringstream os;
+  os <<  f;
+  return os.str();
+}
+
 int main(int argc, char **argv){
 
     Listener listener;
@@ -48,6 +55,7 @@ int main(int argc, char **argv){
     ros::Rate loop_rate(100);
 
     namedWindow("Sea Bed");
+    namedWindow("Depth");
     startWindowThread();
 
     // Create white empty images
@@ -55,14 +63,14 @@ int main(int argc, char **argv){
     int sizex = 15*scale;
     int sizey = 40*scale;
     Mat display_image = Mat::zeros( sizex, sizey, CV_8UC3 );
+    Mat depth_image = Mat::zeros(100, 300, CV_8UC3 );
+    float depth;
 
     while(ros::ok())
         {
         if (listener.test) {
 
             int size = listener.last_msg.ranges.size();
-            int seq = listener.last_msg.header.seq;
-            cout<<seq<<endl;
             int middle_up = sizey/2;
             float x_prec = 0;
             float y_prec = 0;
@@ -70,14 +78,18 @@ int main(int argc, char **argv){
             float angle_min = listener.last_msg.angle_min;
             float angle_max = listener.last_msg.angle_max;
             float angle_increment = listener.last_msg.angle_increment;
-            // cout<<angle_min<<"    "<<angle_max<<"    "<<angle_increment<<endl;
 
             for (int i = 0 ; i<size ; i++) {
                 float alpha = angle_min+i*angle_increment;
-                float range = scale*listener.last_msg.ranges[i];
-                float x = -range*sin(alpha)+middle_up;
-                float y = range*cos(alpha);
+                float range = listener.last_msg.ranges[i];
+                float x = -scale*range*sin(alpha)+middle_up;
+                float y = scale*range*cos(alpha);
 
+                if (i==size/2){
+                    Scalar yellow(0,255,255);
+                    MyLine(display_image, Point(x, 0), Point(x, y), yellow);
+                    depth = range ;
+                }
                 if (i>0){
                     Scalar white(255,255,255);
                     // To draw points
@@ -88,13 +100,30 @@ int main(int argc, char **argv){
                 x_prec = x;
                 y_prec = y;
             }
+            depth = roundf(depth * 100) / 100;
+            string text = float2string(depth);
+            int fontFace = 0;
+            double fontScale = 2;
+            int thickness = 2;
+
+            Size textSize = getTextSize(text, fontFace,
+                                        fontScale, thickness, 0);
+
+            // center the text
+            Point textOrg((depth_image.cols - textSize.width)/2,
+                          (depth_image.rows + textSize.height)/2);
+
+            // then put the text itself
+            putText(depth_image, text, textOrg, fontFace, fontScale,
+                    Scalar::all(255), thickness, 8);
 
             // Display
             imshow("Sea Bed", display_image );
-            // ?? autosize (true);
+            imshow("Depth", depth_image );
 
             waitKey(100);
-            display_image = Mat::zeros( sizex, sizey, CV_8UC3 );
+            display_image = Mat::zeros( sizex, sizey, CV_8UC3);
+            depth_image = Mat::zeros(100, 300, CV_8UC3);
         }
 
         ros::spinOnce();

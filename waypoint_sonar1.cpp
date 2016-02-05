@@ -27,22 +27,16 @@ int main(int argc, char **argv) {
     ros::Rate loop_rate(100);
 
     int traj ;
-    cout<<"Choose trajectory"<<endl
-        <<"0 = straight line"<<endl
-        <<"1 = straight line2"<<endl
-        <<"2 = big straight line"<<endl
-        <<"3 = Square"<<endl;
+    cout<<"Choose trajectory"<<endl<<"0 = straight line"<<endl<<"1 = Hector's square"<<endl;
     cin>>traj;
     int indice = 1;
     int n_points = 4;
+
     freefloating_gazebo::BodySetpoint cmd[n_points];
-    switch(traj){
-
-
 
     // pour faire une ligne droite
 
-          case 0 :
+    if (traj == 0){
         cmd[0].pose.position.x = -20;
         cmd[0].pose.position.y = 0;
         cmd[0].pose.position.z = -5;
@@ -74,78 +68,9 @@ int main(int argc, char **argv) {
         cmd[3].pose.orientation.y = 0;
         cmd[3].pose.orientation.z = 0;
         cmd[3].pose.orientation.w = 1;
-        break;
-
-        case 1 :
-        cmd[0].pose.position.x = 0;
-        cmd[0].pose.position.y = -20;
-        cmd[0].pose.position.z = -5;
-        cmd[0].pose.orientation.x = 0;
-        cmd[0].pose.orientation.y = 1;
-        cmd[0].pose.orientation.z = 1;
-        cmd[0].pose.orientation.w = 0;
-
-        cmd[1].pose.position.x = 0;
-        cmd[1].pose.position.y = 20;
-        cmd[1].pose.position.z = -5;
-        cmd[1].pose.orientation.x = 0;
-        cmd[1].pose.orientation.y = 1;
-        cmd[1].pose.orientation.z = 1;
-        cmd[1].pose.orientation.w = 0;
-
-        cmd[2].pose.position.x = 0;
-        cmd[2].pose.position.y = 20;
-        cmd[2].pose.position.z = -5;
-        cmd[2].pose.orientation.x = 0;
-        cmd[2].pose.orientation.y = 1;
-        cmd[2].pose.orientation.z = 1;
-        cmd[2].pose.orientation.w = 0;
-
-        cmd[3].pose.position.x = 0;
-        cmd[3].pose.position.y = -20;
-        cmd[3].pose.position.z = -5;
-        cmd[3].pose.orientation.x = 0;
-        cmd[3].pose.orientation.y = 1;
-        cmd[3].pose.orientation.z = 1;
-        cmd[3].pose.orientation.w = 0;
-        break;
-
-        case 2 :
-        cmd[0].pose.position.x = -30;
-        cmd[0].pose.position.y = -30;
-        cmd[0].pose.position.z = -5;
-        cmd[0].pose.orientation.x = 0.707;
-        cmd[0].pose.orientation.y = 0.707;
-        cmd[0].pose.orientation.z = 0.707;
-        cmd[0].pose.orientation.w = 0.707;
-
-        cmd[1].pose.position.x = 30;
-        cmd[1].pose.position.y = 30;
-        cmd[1].pose.position.z = -5;
-        cmd[1].pose.orientation.x = 0.707;
-        cmd[1].pose.orientation.y = 0.707;
-        cmd[1].pose.orientation.z = 0.707;
-        cmd[1].pose.orientation.w = 0.707;
-
-        cmd[2].pose.position.x = 30;
-        cmd[2].pose.position.y = 30;
-        cmd[2].pose.position.z = -5;
-        cmd[2].pose.orientation.x = 0.707;
-        cmd[2].pose.orientation.y = 0.707;
-        cmd[2].pose.orientation.z = 0.707;
-        cmd[2].pose.orientation.w = 0.707;
-
-        cmd[3].pose.position.x = -30;
-        cmd[3].pose.position.y = 30;
-        cmd[3].pose.position.z = -5;
-        cmd[3].pose.orientation.x = 0.707;
-        cmd[3].pose.orientation.y = 0.707;
-        cmd[3].pose.orientation.z = 0.707;
-        cmd[3].pose.orientation.w = 0.707;
-        break;
-
-
-        case 3:
+    }
+    else if (traj == 1){    // 0 pour une ligne droite
+        // 1 pour la trajectoire d'Hector
         cmd[0].pose.position.x = -5;
         cmd[0].pose.position.y = -5;
         cmd[0].pose.position.z = -5;
@@ -159,7 +84,8 @@ int main(int argc, char **argv) {
         cmd[1].pose.position.z = -5;
         cmd[1].pose.orientation.x = 0.707;
         cmd[1].pose.orientation.y = -0.707;
-        cmd[1].pose.orientation.z = -0.707;
+        cmd[1].pose.orientation.z = -0.707;    // 0 pour une ligne droite
+        // 1 pour la trajectoire d'Hector
         cmd[1].pose.orientation.w = 0.707;
 
         cmd[2].pose.position.x = 5;
@@ -177,7 +103,6 @@ int main(int argc, char **argv) {
         cmd[3].pose.orientation.y = -0.707;
         cmd[3].pose.orientation.z = -0.707;
         cmd[3].pose.orientation.w = -0.707;
-        break;
     }
 
     while(ros::ok())

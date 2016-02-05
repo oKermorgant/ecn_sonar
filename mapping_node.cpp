@@ -50,12 +50,13 @@ int main(int argc, char **argv){
     namedWindow("Sea Bed");
     startWindowThread();
 
-    // Create white empty images
+    // Create black empty images
     float scale = 21;
-    int sizex = 50*scale;
+    int sizex = 45*scale;
     int sizey = 40*scale;
     Mat display_image = Mat::zeros( sizex, sizey, CV_8UC3 );
-    int loop = 0;
+    //int loop = 0;
+    int image_size=sizey;
 
     while(ros::ok())
         {
@@ -77,22 +78,23 @@ int main(int argc, char **argv){
                 float range = scale*listener.last_msg.ranges[i];
                 float intensities = listener.last_msg.intensities[i];
                 float x = -range*sin(alpha)+middle_up;
-                float y = range*cos(alpha);
                 Scalar white(255,255,255);
                 Scalar blue(255,0,0);
                 if (intensities < 5000){
-                    MyLine( display_image, Point(x, loop), Point(x, loop), white);
+                    MyLine( display_image, Point(x, 1), Point(x, 1), white);
                 }
                 if (intensities > 5000){
-                    MyLine( display_image, Point(x, loop), Point(x, loop), blue);
+                    MyLine( display_image, Point(x, 1), Point(x, 1), blue);
                 }
             }
             // Display
             imshow("Sea Bed", display_image );
-            // ?? autosize (true);
+
+            for (int j = 1 ; j<image_size; j++){
+                Mat M1=display_image.row(image_size-j);
+                display_image.row(image_size-j-1).copyTo(M1);
+            }
             waitKey(100);
-            loop = loop+1;
-            // display_image = Mat::zeros( sizex, sizey, CV_8UC3 );
         }
 
         ros::spinOnce();
