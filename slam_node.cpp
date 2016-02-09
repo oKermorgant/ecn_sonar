@@ -23,7 +23,7 @@ class Listener
     bool test_LaserScan;
     bool test_Pose;
     void Callback_LaserScan(const sensor_msgs::LaserScan& msg) {last_msg_LaserScan = msg; test_LaserScan = true;}
-    void Callback_Pose(const nav_msgs::Odometry& msg) {last_msg_Pose = msg; test_Pose = true;};
+    void Callback_Pose(const nav_msgs::Odometry& msg) {last_msg_Pose = msg; test_Pose = true;}
     };
 
 
@@ -42,99 +42,62 @@ int main(int argc, char **argv){
     startWindowThread();
 
     // Create black empty images
-    float scale = 20;
-    int sizey = 45*scale;
-    int sizex = 40*scale;
+    float scale = 10;
+    int sizey = 90*scale;
+    int sizex = 90*scale;
     Mat K = Mat::zeros(sizey, sizex, CV_8UC3);
     Mat display_image = K;
     int loop = 0;
-    float x;
-    float y;
-    float x_prec = 0;
-    float y_prec = 0;
-    float xmin;
-    float xmax;
+    float x, x_prec, xP, xP_prec, xx;
+    float y, y_prec, yP, yP_prec, yy;
+    int middle_x = sizex/2;
+    int middle_y = sizey/2;
+    float u;
 
     while(ros::ok())
         {
         if (listener_LaserScan.test_LaserScan && listener_Pose.test_Pose) {
 
             int size = listener_LaserScan.last_msg_LaserScan.ranges.size();
-            int middle_up = sizex/2;
+
             int dist ;
 
             float angle_min = listener_LaserScan.last_msg_LaserScan.angle_min;
             float angle_max = listener_LaserScan.last_msg_LaserScan.angle_max;
             float angle_increment = listener_LaserScan.last_msg_LaserScan.angle_increment;
 
-            float xP = listener_Pose.last_msg_Pose.pose.pose.position.x;
-            float yP = listener_Pose.last_msg_Pose.pose.pose.position.y;
+            xP = listener_Pose.last_msg_Pose.pose.pose.position.x;
+            yP = listener_Pose.last_msg_Pose.pose.pose.position.y;
 
             // To calculate the angle
-/*
-            float q0 = listener.last_msg_Pose.pose.pose.orientation.x;
-            float q1 = listener.last_msg_Pose.pose.pose.orientation.y;
-            float q2 = listener.last_msg_Pose.pose.pose.orientation.z;
-            float q3 = listener.last_msg_Pose.pose.pose.orientation.w;
-            float alpha = atan2(2*(q0*q1+q2*q3),1-2*(q1*q1+q2*q2));
-*/
-            xmin = 10000000;
-            xmax = 0;
+            float q0 = listener_Pose.last_msg_Pose.pose.pose.orientation.x;
+            float q1 = listener_Pose.last_msg_Pose.pose.pose.orientation.y;
+            float q2 = listener_Pose.last_msg_Pose.pose.pose.orientation.z;
+            float q3 = listener_Pose.last_msg_Pose.pose.pose.orientation.w;
+            float yaw = atan2(2*(q0*q1+q2*q3),1-2*(q1*q1+q2*q2));
+            float pitch = asin(2*(q0*q2-q3*q1));
+            float roll = atan2(2*(q0*q3+q1*q2),1-2*(q2*q2+q3*q3));
 
-            for (int i = 0 ; i<size ; i++) {
+
+            for (int i = 0 ; i<size ; i++) { // i is the
                 float alpha = angle_min+i*angle_increment;
                 float range = listener_LaserScan.last_msg_LaserScan.ranges[i];
                 float intensities = listener_LaserScan.last_msg_LaserScan.intensities[i];
-                x = -scale*range*sin(alpha)+(rand() % 2 - 1)+middle_up;
-                y = xP;
-
-                // Extracting min and max of x
-
-                if (x>xmax){
-                    xmax = x;
-                }
-                if (x<xmin){
-                    xmin = x;
-                }
+                u = -scale*range*sin(alpha+M_PI+roll);
 
                 // Greyscale profile
                 float final_intensities=intensities/(range*range);
                 float light = 6;
                 Scalar greyscale = Scalar::all(light*final_intensities);
                 // Drawing out the line, more and more with the range
-                line(display_image, Point(x, 1), Point(x+range*range/150, 1), greyscale,1,8,0);
-
+                xx = u*cos(yaw) // location of the detected point
+                        +middle_x // First location detected = center of the image
+                            -range*scale*sin(pitch)*sin(yaw); // Gap due to pitch angle
+                yy = u*sin(yaw)+middle_y-range*scale*sin(pitch)*cos(yaw);
+                line(display_image, Point(xx, yy), Point(xx, yy), greyscale,1,8,0);
             }
-
-            if (loop>1){
-                dist = abs(scale*(y-y_prec)) ;
-                // Scrolling image dist-further
-                for (int j = 1 ; j<sizey-dist ; j++){
-                    display_image.row(sizey-dist-1-j).copyTo(display_image.row(sizey-j));
-                }
-                // Copying the first line on dist
-                for (int n = sizey-dist ; n<sizey ; n++){
-                    display_image.row(1).copyTo(display_image.row(sizey-n));
-
-                    // Adding noise
-                    Mat noise = Mat::zeros(1, sizex, CV_8UC3);
-                    for (int m = 0 ; m<sizex ; m++){
-                        if (!(m<xmin || m>xmax)){
-                            int grey = rand() % 30 ;
-                            noise.col(m)= Scalar::all(grey);
-                        }
-                    }
-
-                    Mat display_noise = display_image.row(1)+noise;
-                    display_noise.row(0).copyTo(display_image.row(sizey-n+1));
-
-                    namedWindow( "rline", CV_WINDOW_AUTOSIZE );
-                    imshow("rline",noise);
-
-                }
-                // Erasing the 1st line
-                K.row(0).copyTo(display_image.row(1));
-            }
+            middle_x = sizex/2 + yP*scale;
+            middle_y = sizey/2 - xP*scale;
 
             // Display
             imshow("Sea Bed", display_image );
@@ -142,6 +105,8 @@ int main(int argc, char **argv){
             float resolution_y = 100;
             waitKey(resolution_y);
 
+            xP_prec = xP;
+            yP_prec = yP;
             y_prec = y ;
             loop = loop+1;
         }
