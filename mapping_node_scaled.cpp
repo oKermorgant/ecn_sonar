@@ -52,8 +52,6 @@ int main(int argc, char **argv){
     float y;
     float x_prec = 0;
     float y_prec = 0;
-    float xmin;
-    float xmax;
 
     while(ros::ok())
         {
@@ -70,17 +68,6 @@ int main(int argc, char **argv){
             float xP = listener_Pose.last_msg_Pose.pose.pose.position.x;
             float yP = listener_Pose.last_msg_Pose.pose.pose.position.y;
 
-            // To calculate the angle
-/*
-            float q0 = listener.last_msg_Pose.pose.pose.orientation.x;
-            float q1 = listener.last_msg_Pose.pose.pose.orientation.y;
-            float q2 = listener.last_msg_Pose.pose.pose.orientation.z;
-            float q3 = listener.last_msg_Pose.pose.pose.orientation.w;
-            float alpha = atan2(2*(q0*q1+q2*q3),1-2*(q1*q1+q2*q2));
-*/
-            xmin = 10000000;
-            xmax = 0;
-
             for (int i = 0 ; i<size ; i++) {
                 float alpha = angle_min+i*angle_increment;
                 float range = listener_LaserScan.last_msg_LaserScan.ranges[i];
@@ -88,22 +75,42 @@ int main(int argc, char **argv){
                 x = -scale*range*sin(alpha)+(rand() % 2 - 1)+middle_up;
                 y = xP;
 
-                // Extracting min and max of x
-
-                if (x>xmax){
-                    xmax = x;
-                }
-                if (x<xmin){
-                    xmin = x;
-                }
-
                 // Greyscale profile
                 float final_intensities=intensities/(range*range);
-                float light = 6;
-                Scalar greyscale = Scalar::all(light*final_intensities);
-                // Drawing out the line, more and more with the range
-                line(display_image, Point(x, 1), Point(x+range*range/150, 1), greyscale,1,8,0);
+                float light = 5;
 
+                // Display mode :
+                // 0 = grey image without noise
+                // 1 = grey image with noise
+                // 2 = blue image with noise
+                // 3 = cyan image with noise
+                // 4 = pink image with noise
+                int mode = 3 ;
+
+                Scalar greyscale = Scalar::all(light*final_intensities);
+                float tone = light*intensities/(range*range)+rand()%20;
+                Scalar noises = Scalar::all(tone);
+                Scalar blues = Scalar(2.5*tone,tone,0.4*tone);
+                Scalar cyans = Scalar(3*tone,2*tone,0.5*tone);
+                Scalar pinks = Scalar(2*tone,tone,2*tone);
+
+                switch(mode){
+                case 0 :
+                    circle(display_image, Point(x, 10), scale*0.14,greyscale,-1,8,0);
+                    break;
+                case 1 :
+                    circle(display_image, Point(x, 10), scale*0.14 , noises,-1,8,0);
+                    break;
+                case 2 :
+                    circle(display_image, Point(x, 10), scale*0.14 , blues,-1,8,0);
+                    break;
+                case 3 :
+                    circle(display_image, Point(x, 10), scale*0.14 , cyans,-1,8,0);
+                    break;
+                case 4 :
+                    circle(display_image, Point(x, 10), scale*0.14 , pinks,-1,8,0);
+                    break;
+                }
             }
 
             if (loop>1){
@@ -112,28 +119,7 @@ int main(int argc, char **argv){
                 for (int j = 1 ; j<sizey-dist ; j++){
                     display_image.row(sizey-dist-1-j).copyTo(display_image.row(sizey-j));
                 }
-                // Copying the first line on dist
-                for (int n = sizey-dist ; n<sizey ; n++){
-                    display_image.row(1).copyTo(display_image.row(sizey-n));
 
-                    // Adding noise
-                    Mat noise = Mat::zeros(1, sizex, CV_8UC3);
-                    for (int m = 0 ; m<sizex ; m++){
-                        if (!(m<xmin || m>xmax)){
-                            int grey = rand() % 30 ;
-                            noise.col(m)= Scalar::all(grey);
-                        }
-                    }
-
-                    Mat display_noise = display_image.row(1)+noise;
-                    display_noise.row(0).copyTo(display_image.row(sizey-n+1));
-
-                    namedWindow( "rline", CV_WINDOW_AUTOSIZE );
-                    imshow("rline",noise);
-
-                }
-                // Erasing the 1st line
-                K.row(0).copyTo(display_image.row(1));
             }
 
             // Display
