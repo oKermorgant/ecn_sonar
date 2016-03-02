@@ -24,19 +24,15 @@ include_directories(
 ## Declare a C++ executable
 add_executable(waypoint waypoint_sonar.cpp)
 add_executable(display display_node.cpp)
-add_executable(mapping mapping_node.cpp)
-add_executable(mapping_scaled mapping_node_scaled.cpp)
-add_executable(slam slam_node.cpp)
-add_executable(image_test image_test.cpp)
+add_executable(mapping mapping_node_scaled.cpp)
+add_executable(slam slam_node_2.cpp)
 
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(waypoint ${catkin_LIBRARIES} )
 target_link_libraries(display ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
 target_link_libraries(mapping ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
-target_link_libraries(mapping_scaled ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
 target_link_libraries(slam ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
-target_link_libraries(image_test ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
 
 
 # specify dependency on custom messages
