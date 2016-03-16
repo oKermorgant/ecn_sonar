@@ -1,3 +1,15 @@
+/*
+ * name : slam_node_2
+ * author : Marie SCHNEIDER (ECN)
+ * date : 2016-03-16
+ *
+ * description : a ROS node for ecn_sonar
+ *               displays a map with the SLAM (Simultaneous Localization And Mapping) technique
+ *
+ * remarks : NOT WORKING (trial)
+*/
+
+
 #include <sstream>
 #include <stdio.h>
 #include <vector>

@@ -1,3 +1,15 @@
+/*
+ * name : waypoint_sonar
+ * author : Marie SCHNEIDER (ECN)
+ *          Hector MELEY (ECN)
+ * date : 2016-03-16
+ *
+ * description : a ROS node for ecn_sonar
+ *               gives a trejectory to the robot, defined by waypoints
+ *
+ * remarks : 4 trajectories available, look l.42
+*/
+
 #include <sstream>
 #include <stdio.h>
 #include <vector>

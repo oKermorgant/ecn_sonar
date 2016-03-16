@@ -1,3 +1,15 @@
+/*
+ * name : display_node
+ * author : Marie SCHNEIDER (ECN)
+ * date : 2016-03-16
+ *
+ * description : an intermediate ROS node for ecn_sonar
+ *               displays the surface of the sea bed and the depth at the middle point
+ *
+ * remarks : not compulsory, but useful to check if something is working
+*/
+
+
 #include <sstream>
 #include <stdio.h>
 #include <vector>

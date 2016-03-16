@@ -1,3 +1,16 @@
+/*
+ * name : mapping_node_scaled
+ * author : Marie SCHNEIDER (ECN)
+ * date : 2016-03-16
+ *
+ * description : a ROS node for ecn_sonar
+ *               displays a map image using the LaserScan data and the position of the robot
+ *
+ * remarks : - no autoscale : if too close or too far from the bottom, display could be less accurate
+ *           - it is possible to change the display color by changing the variable "mode"
+*/
+
+
 #include <sstream>
 #include <stdio.h>
 #include <vector>
@@ -12,7 +25,6 @@
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/highgui/highgui.hpp>
 
-
 using namespace cv;
 using namespace std;
 
@@ -23,7 +35,7 @@ class Listener
     bool test_LaserScan;
     bool test_Pose;
     void Callback_LaserScan(const sensor_msgs::LaserScan& msg) {last_msg_LaserScan = msg; test_LaserScan = true;}
-    void Callback_Pose(const nav_msgs::Odometry& msg) {last_msg_Pose = msg; test_Pose = true;};
+    void Callback_Pose(const nav_msgs::Odometry& msg) {last_msg_Pose = msg; test_Pose = true;}
     };
 
 
@@ -50,7 +62,6 @@ int main(int argc, char **argv){
     int loop = 0;
     float x;
     float y;
-    float x_prec = 0;
     float y_prec = 0;
 
     while(ros::ok())
@@ -62,11 +73,9 @@ int main(int argc, char **argv){
             int dist ;
 
             float angle_min = listener_LaserScan.last_msg_LaserScan.angle_min;
-            float angle_max = listener_LaserScan.last_msg_LaserScan.angle_max;
             float angle_increment = listener_LaserScan.last_msg_LaserScan.angle_increment;
 
             float xP = listener_Pose.last_msg_Pose.pose.pose.position.x;
-            float yP = listener_Pose.last_msg_Pose.pose.pose.position.y;
 
             for (int i = 0 ; i<size ; i++) {
                 float alpha = angle_min+i*angle_increment;
@@ -75,22 +84,19 @@ int main(int argc, char **argv){
                 x = -scale*range*sin(alpha)+(rand() % 2 - 1)+middle_up;
                 y = xP;
 
-                // Greyscale profile
-                float final_intensities=intensities/(range*range);
-                float light = 5;
-
                 // Display mode :
-                // 0 = grey image without noise
-                // 1 = grey image with noise
-                // 2 = blue image with noise
-                // 3 = cyan image with noise
-                // 4 = pink image with noise
-                int mode = 3 ;
+                /// 0 = grey image without noise
+                /// 1 = grey image with noise
+                /// 2 = blue image with noise
+                /// 3 = cyan image with noise
+                /// 4 = pink image with noise
+                int mode = 2 ;
 
-                Scalar greyscale = Scalar::all(light*final_intensities);
-                float tone = light*intensities/(range*range)+rand()%20;
-                Scalar noises = Scalar::all(tone);
+                // float tone = light*intensities/(range*range)+rand()%20;
+                float tone = 0.25*intensities/range+rand()%20;
                 Scalar blues = Scalar(2.5*tone,tone,0.4*tone);
+                Scalar greyscale = Scalar::all(tone);
+                Scalar noises = Scalar::all(tone);
                 Scalar cyans = Scalar(3*tone,2*tone,0.5*tone);
                 Scalar pinks = Scalar(2*tone,tone,2*tone);
 
@@ -114,7 +120,7 @@ int main(int argc, char **argv){
             }
 
             if (loop>1){
-                dist = abs(scale*(y-y_prec)) ;
+                dist = abs(scale*(y-y_prec))+1 ;
                 // Scrolling image dist-further
                 for (int j = 1 ; j<sizey-dist ; j++){
                     display_image.row(sizey-dist-1-j).copyTo(display_image.row(sizey-j));
