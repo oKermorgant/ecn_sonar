@@ -17,7 +17,7 @@
 #include <stdlib.h>
 #include "ros/ros.h"
 #include <nav_msgs/Odometry.h>
-#include <freefloating_gazebo/BodySetpoint.h>
+#include <geometry_msgs/PoseStamped.h>
 
 using namespace std;
 
@@ -35,7 +35,7 @@ int main(int argc, char **argv) {
     ros::init(argc, argv, "waypoint_node");
     ros::NodeHandle nh;
     ros::Subscriber sub = nh.subscribe("/ecn_auv/state", 1, & Listener::Callback, & listener);
-    ros::Publisher publisher = nh.advertise<freefloating_gazebo::BodySetpoint>("/ecn_auv/body_setpoint", 1);
+    ros::Publisher publisher = nh.advertise<geometry_msgs::PoseStamped>("/ecn_auv/body_position_setpoint", 1);
     ros::Rate loop_rate(100);
 
     int traj ;
@@ -48,7 +48,7 @@ int main(int argc, char **argv) {
     int indice = 0;
     int n_points=0;
     bool first = true;
-    freefloating_gazebo::BodySetpoint cmd[16];
+    geometry_msgs::PoseStamped cmd[16];
 
     switch(traj){
 

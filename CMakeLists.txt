@@ -34,6 +34,3 @@ target_link_libraries(display ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
 target_link_libraries(mapping ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
 target_link_libraries(slam ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
 
-
-# specify dependency on custom messages
-add_dependencies(waypoint freefloating_gazebo_generate_messages_cpp)

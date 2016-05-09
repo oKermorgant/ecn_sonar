@@ -17,7 +17,6 @@
 #include <stdlib.h>
 #include "ros/ros.h"
 #include <sensor_msgs/LaserScan.h>
-#include <freefloating_gazebo/BodySetpoint.h>
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>

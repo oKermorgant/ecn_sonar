@@ -18,7 +18,6 @@
 #include <stdlib.h>
 #include "ros/ros.h"
 #include <sensor_msgs/LaserScan.h>
-#include <freefloating_gazebo/BodySetpoint.h>
 #include <nav_msgs/Odometry.h>
 
 #include <opencv2/core/core.hpp>
