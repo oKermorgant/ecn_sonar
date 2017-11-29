@@ -62,7 +62,7 @@ int main(int argc, char **argv){
 
     ros::init(argc, argv, "display_node");
     ros::NodeHandle nh;
-    ros::Subscriber sub = nh.subscribe("/ecn_auv/sonar", 1, & Listener::Callback, & listener);
+    ros::Subscriber sub = nh.subscribe("/auv/sonar", 1, & Listener::Callback, & listener);
     ros::Rate loop_rate(100);
 
     namedWindow("Sea Bed");

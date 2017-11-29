@@ -34,8 +34,8 @@ int main(int argc, char **argv) {
 
     ros::init(argc, argv, "waypoint_node");
     ros::NodeHandle nh;
-    ros::Subscriber sub = nh.subscribe("/ecn_auv/state", 1, & Listener::Callback, & listener);
-    ros::Publisher publisher = nh.advertise<geometry_msgs::PoseStamped>("/ecn_auv/body_position_setpoint", 1);
+    ros::Subscriber sub = nh.subscribe("/auv/state", 1, & Listener::Callback, & listener);
+    ros::Publisher publisher = nh.advertise<geometry_msgs::PoseStamped>("/auv/body_position_setpoint", 1);
     ros::Rate loop_rate(100);
 
     int traj ;

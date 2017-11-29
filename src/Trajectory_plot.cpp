@@ -29,7 +29,7 @@ int main(int argc, char **argv){
 
     ros::init(argc, argv, "display_node");
     ros::NodeHandle nh;
-    ros::Subscriber sub_Pose = nh.subscribe("/ecn_auv/state", 1, & Listener::Callback_Pose, & listener_Pose);
+    ros::Subscriber sub_Pose = nh.subscribe("/auv/state", 1, & Listener::Callback_Pose, & listener_Pose);
     ros::Rate loop_rate(100);
 
     namedWindow("Trajectory");
