@@ -44,7 +44,8 @@ int main(int argc, char **argv) {
         <<"   1 = straight line Y over containers"<<endl
         <<"   2 = straight line Y over boat"<<endl
         <<"   3 = square plop2"<<endl;
-    cin>>traj;
+    //cin>>traj;
+        traj = 1;
     int indice = 0;
     int n_points=0;
     bool first = true;

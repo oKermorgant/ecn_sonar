@@ -27,10 +27,16 @@ add_executable(display src/display_node.cpp)
 add_executable(mapping src/mapping_node_scaled.cpp)
 add_executable(slam src/slam_node_2.cpp)
 
+add_executable(display_block src/display_block_node.cpp)
+add_executable(display_block_2 src/display_block_node_2.cpp)
+
+
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(waypoint ${catkin_LIBRARIES} )
 target_link_libraries(display ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
 target_link_libraries(mapping ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
 target_link_libraries(slam ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
+target_link_libraries(display_block ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
+target_link_libraries(display_block_2 ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
 

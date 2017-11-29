@@ -2,7 +2,7 @@
 
 <!-- STL-version of the URDF, used with gazebo for dynamic simulation  -->
 
-<robot name="ecn_auv" xmlns:xacro="http://www.ros.org/wiki/xacro">
+<robot name="auv" xmlns:xacro="http://www.ros.org/wiki/xacro">
     
     <xacro:property name="PI" value="3.1415926535897931"/>
     
@@ -132,7 +132,7 @@
             
     <gazebo reference="base_link">
     <sensor name="sonar" type="ray">
-        <visualize>false</visualize>
+        <visualize>true</visualize>
         <pose>${body_length/3} 0 0 0 0.785398 0</pose>
         <update_rate>10</update_rate>
         <ray>
