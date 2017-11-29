@@ -22,10 +22,10 @@ include_directories(
 )
 
 ## Declare a C++ executable
-add_executable(waypoint waypoint_sonar.cpp)
-add_executable(display display_node.cpp)
-add_executable(mapping mapping_node_scaled.cpp)
-add_executable(slam slam_node_2.cpp)
+add_executable(waypoint src/waypoint_sonar.cpp)
+add_executable(display src/display_node.cpp)
+add_executable(mapping src/mapping_node_scaled.cpp)
+add_executable(slam src/slam_node_2.cpp)
 
 
 ## Specify libraries to link a library or executable target against

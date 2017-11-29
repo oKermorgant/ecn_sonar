@@ -5,7 +5,7 @@
  * date : 2016-03-16
  *
  * description : a ROS node for ecn_sonar
- *               gives a trejectory to the robot, defined by waypoints
+ *               gives a trajectory to the robot, defined by waypoints
  *
  * remarks : 4 trajectories available, look l.42
 */
@@ -56,7 +56,7 @@ int main(int argc, char **argv) {
         n_points=2;
         cmd[0].pose.position.x = -20;
         cmd[0].pose.position.y = 6;
-        cmd[0].pose.position.z = -10;
+        cmd[0].pose.position.z = -5;
         cmd[0].pose.orientation.x = 0;
         cmd[0].pose.orientation.y = 0;
         cmd[0].pose.orientation.z = 0;
@@ -64,7 +64,7 @@ int main(int argc, char **argv) {
 
         cmd[1].pose.position.x = 20;
         cmd[1].pose.position.y = 6;
-        cmd[1].pose.position.z = -10;
+        cmd[1].pose.position.z = -5;
         cmd[1].pose.orientation.x = 0;
         cmd[1].pose.orientation.y = 0;
         cmd[1].pose.orientation.z = 0;
@@ -75,7 +75,7 @@ int main(int argc, char **argv) {
         n_points=2;
         cmd[0].pose.position.x = 0;
         cmd[0].pose.position.y = -10;
-        cmd[0].pose.position.z = -10;
+        cmd[0].pose.position.z = -5;
         cmd[0].pose.orientation.x = 1/sqrt(2);
         cmd[0].pose.orientation.y = 1/sqrt(2);
         cmd[0].pose.orientation.z = 1/sqrt(2);
@@ -83,7 +83,7 @@ int main(int argc, char **argv) {
 
         cmd[1].pose.position.x = 0;
         cmd[1].pose.position.y = 15;
-        cmd[1].pose.position.z = -10;
+        cmd[1].pose.position.z = -5;
         cmd[1].pose.orientation.x = 1/sqrt(2);
         cmd[1].pose.orientation.y = 1/sqrt(2);
         cmd[1].pose.orientation.z = 1/sqrt(2);
